@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta name="generator" content="pandoc" />
+
+
+
+<title>Migrating from R Markdown v1</title>
+
+<script src="libs/jquery-1.11.0/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="libs/bootstrap-2.3.2/css/cerulean.min.css" rel="stylesheet" />
+<link href="libs/bootstrap-2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+
+<style type="text/css">
+
+/* padding for bootstrap navbar */
+body {
+  padding-top: 50px;
+  padding-bottom: 40px;
+}
+@media (max-width: 979px) {
+  body {
+    padding-top: 0;
+  }
+}
+
+/* offset scroll position for anchor links (for fixed navbar)  */
+@media (min-width: 980px) {
+  .section h2 {
+    padding-top: 52px;
+    margin-top: -52px;
+  }
+  .section h3 {
+    padding-top: 52px;
+    margin-top: -52px;
+  }
+}
+
+
+/* don't use link color in navbar */
+.dropdown-menu>li>a {
+  color: black;
+}
+
+</style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="libs/highlight/textmate.css"
+      type="text/css" />
+<script src="libs/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<div class="container-fluid main-container">
+
+
+<div class="navbar navbar-default navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="brand" href="index.html">Marcio Nicolau :: Consultoria estatística</a>
+      <div class="nav-collapse collapse">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li class="dropdown">
+            <a href="authoring" class="dropdown-toggle" data-toggle="dropdown">Authoring <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+               <li><a href="authoring_basics.html">Markdown Basics</a></li>
+               <li><a href="authoring_pandoc_markdown.html">Pandoc Markdown</a></li>
+               <li><a href="authoring_rcodechunks.html">R Code Chunks</a></li>
+               <li class="divider"></li>
+               <li><a href="authoring_shiny.html">Interactive Shiny Docs</a></li>
+               <li class="divider"></li>
+               <li><a href="authoring_migrating_from_v1.html">Migrating from v1</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="formats" class="dropdown-toggle" data-toggle="dropdown">Formats <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+               <li class="nav-header">Documents</li>
+               <li><a href="html_document_format.html">HTML</a></li>
+               <li><a href="pdf_document_format.html">PDF</a></li>
+               <li><a href="word_document_format.html">Word</a></li>
+               <li><a href="markdown_document_format.html">Markdown</a></li>
+               <li class="divider"></li>
+               <li class="nav-header">Presentations</li>
+               <li><a href="ioslides_presentation_format.html">ioslides</a></li>
+               <li><a href="revealjs_presentation_format.html">reveal.js</a></li>
+               <li><a href="beamer_presentation_format.html">Beamer</a></li>
+               <li class="divider"></li>
+               <li><a href="r_notebook_format.html">R Notebooks</a></li>
+            </ul>
+          </li>
+           <li class="dropdown">
+            <a href="developer" class="dropdown-toggle" data-toggle="dropdown">Developer <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+               <li><a href="developer_html_widgets.html">HTML Widgets</a></li>
+               <li><a href="developer_shiny_widgets.html">Shiny Widgets</a></li>
+               <li class="divider"></li>
+               <li><a href="developer_document_templates.html">Document Templates</a></li>
+               <li><a href="developer_custom_formats.html">Creating New Formats</a></li>
+               <li class="divider"></li>
+               <li><a href="https://github.com/rstudio/rmarkdown">R Markdown on GitHub</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+</div>
+
+<div class="container">
+<div class="row">
+<div class="span10 offset1">
+
+<div id="header">
+<h1 class="title">Migrating from R Markdown v1</h1>
+</div>
+
+
+<div id="changes-in-v2" class="section level2">
+<h2>Changes in v2</h2>
+<p>The current implementation of R Markdown (v2) is an evolution of the original implementation, which was not based on pandoc but rather the <a href="https://github.com/rstudio/markdown">markdown</a> package. Moving to pandoc brings many new features to R Markdown however carries some minor incompatibilities with the previous implementation that are described below.</p>
+<div id="markdown-syntax" class="section level3">
+<h3>Markdown Syntax</h3>
+<p>The following changes to markdown syntax were made in R Markdown v2:</p>
+<ol style="list-style-type: decimal">
+<li>The syntax for superscript now requires a closing ^ (e.g. <code>superscript^2^</code>).</li>
+<li>The WordPress-style LaTeX equation syntax (e.g. <code>$latex &lt;equation&gt;$</code>) is no longer supported.</li>
+<li>Markdown is rendered even if it’s contained within HTML tags.</li>
+</ol>
+</div>
+<div id="knitr-caching" class="section level3">
+<h3>Knitr Caching</h3>
+<p>One other important change relates to the use of the <a href="http://yihui.name/knitr/demo/cache/">knitr cache</a>. When R Markdown knits documents it explicitly configures the knitr cache to use a directory based on the name of the input file (e.g. <code>inputfile_cache</code>). If you are setting an explicit cache directory within your document (e.g. via <code>opts_chunk$set(cache.path = ...))</code>) you should remove this code and rely on R Markdown to set the cache directory.</p>
+</div>
+</div>
+<div id="continuing-to-use-v1" class="section level2">
+<h2>Continuing to Use v1</h2>
+<p>If you are using RStudio you can force RStudio to render documents using R Markdown v1 by adding the following special comment to your source file:</p>
+<pre>&lt;!-- rmarkdown v1 --&gt;</pre>
+
+<p>For rendering R Markdown v1 documents outside of RStudio you can continue to use the <a href="https://github.com/rstudio/markdown">markdown</a> package.</p>
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- some extra javascript for older browsers -->
+<script type="text/javascript" src="libs/polyfill.js"></script>
+
+<script>
+
+// manage active state of menu based on current page
+$(document).ready(function () {
+
+    // active menu
+    href = window.location.pathname
+    href = href.substr(href.lastIndexOf('/') + 1)
+    $('a[href="' + href + '"]').parent().addClass('active');
+
+    // manage active menu header
+    if (href.startsWith('authoring_'))
+      $('a[href="' + 'authoring' + '"]').parent().addClass('active');
+    else if (href.endsWith('_format.html'))
+      $('a[href="' + 'formats' + '"]').parent().addClass('active');
+    else if (href.startsWith('developer_'))
+      $('a[href="' + 'developer' + '"]').parent().addClass('active');
+
+});
+
+</script>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+
+</body>
+</html>

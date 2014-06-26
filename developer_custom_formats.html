@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta name="generator" content="pandoc" />
+
+
+
+<title>Creating New Formats</title>
+
+<script src="libs/jquery-1.11.0/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="libs/bootstrap-2.3.2/css/cerulean.min.css" rel="stylesheet" />
+<link href="libs/bootstrap-2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+
+<style type="text/css">
+
+/* padding for bootstrap navbar */
+body {
+  padding-top: 50px;
+  padding-bottom: 40px;
+}
+@media (max-width: 979px) {
+  body {
+    padding-top: 0;
+  }
+}
+
+/* offset scroll position for anchor links (for fixed navbar)  */
+@media (min-width: 980px) {
+  .section h2 {
+    padding-top: 52px;
+    margin-top: -52px;
+  }
+  .section h3 {
+    padding-top: 52px;
+    margin-top: -52px;
+  }
+}
+
+
+/* don't use link color in navbar */
+.dropdown-menu>li>a {
+  color: black;
+}
+
+</style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="libs/highlight/textmate.css"
+      type="text/css" />
+<script src="libs/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<div class="container-fluid main-container">
+
+
+<div class="navbar navbar-default navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="brand" href="index.html">Marcio Nicolau :: Consultoria estatística</a>
+      <div class="nav-collapse collapse">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li class="dropdown">
+            <a href="authoring" class="dropdown-toggle" data-toggle="dropdown">Authoring <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+               <li><a href="authoring_basics.html">Markdown Basics</a></li>
+               <li><a href="authoring_pandoc_markdown.html">Pandoc Markdown</a></li>
+               <li><a href="authoring_rcodechunks.html">R Code Chunks</a></li>
+               <li class="divider"></li>
+               <li><a href="authoring_shiny.html">Interactive Shiny Docs</a></li>
+               <li class="divider"></li>
+               <li><a href="authoring_migrating_from_v1.html">Migrating from v1</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="formats" class="dropdown-toggle" data-toggle="dropdown">Formats <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+               <li class="nav-header">Documents</li>
+               <li><a href="html_document_format.html">HTML</a></li>
+               <li><a href="pdf_document_format.html">PDF</a></li>
+               <li><a href="word_document_format.html">Word</a></li>
+               <li><a href="markdown_document_format.html">Markdown</a></li>
+               <li class="divider"></li>
+               <li class="nav-header">Presentations</li>
+               <li><a href="ioslides_presentation_format.html">ioslides</a></li>
+               <li><a href="revealjs_presentation_format.html">reveal.js</a></li>
+               <li><a href="beamer_presentation_format.html">Beamer</a></li>
+               <li class="divider"></li>
+               <li><a href="r_notebook_format.html">R Notebooks</a></li>
+            </ul>
+          </li>
+           <li class="dropdown">
+            <a href="developer" class="dropdown-toggle" data-toggle="dropdown">Developer <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+               <li><a href="developer_html_widgets.html">HTML Widgets</a></li>
+               <li><a href="developer_shiny_widgets.html">Shiny Widgets</a></li>
+               <li class="divider"></li>
+               <li><a href="developer_document_templates.html">Document Templates</a></li>
+               <li><a href="developer_custom_formats.html">Creating New Formats</a></li>
+               <li class="divider"></li>
+               <li><a href="https://github.com/rstudio/rmarkdown">R Markdown on GitHub</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+</div>
+
+<div class="container">
+<div class="row">
+<div class="span10 offset1">
+
+<div id="header">
+<h1 class="title">Creating New Formats</h1>
+</div>
+
+
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>R Markdown includes several built-in document and presentation formats however you aren’t by any means limited to those. An R Markdown format is at it’s core just an R function. When you include an output format in the YAML front-matter of a document you are really just specifying the format function to call and the parameters to pass to it. For example, consider the following:</p>
+<pre><code>---
+title: &quot;Habits&quot;
+output:
+  mypackage::quarterly_report
+    toc: true
+---</code></pre>
+<p>This says to use the <code>quarterly_report</code> function defined in <code>mypackage</code> as the output format and to pass <code>toc = TRUE</code> as a parameter to the function.</p>
+<p>The easist way to create a new format is to write a function that calls one of the built-in formats (they are designed to be extensible enough to serve as the foundation of custom formats). Another lower-level approach is to define a format directly by explicitly specifying knitr options and pandoc command line arguments. Both of these techniques are described below.</p>
+</div>
+<div id="deriving-from-built-in-formats" class="section level2">
+<h2>Deriving from Built-In Formats</h2>
+<p>To create a new format based on a built-in one you simply define a new function that calls one of the existing format functions. For example:</p>
+<pre class="r"><code>quarterly_report &lt;- function(toc = TRUE) {
+
+  # get the locations of resource files located within the package
+  css &lt;- system.file(&quot;reports/styles.css&quot;, package = &quot;mypackage&quot;)
+  header &lt;- system.file(&quot;reports/quarterly/header.html&quot;, package = &quot;mypackage&quot;)
+
+  # call the base html_document function
+  rmarkdown::html_document(toc = toc,
+                           fig_width = 6.5,
+                           fig_height = 4,
+                           theme = NULL,
+                           css = css,
+                           includes = includes(before_body = header))
+}</code></pre>
+<p>This defines a new format with the following behavior:</p>
+<ol style="list-style-type: decimal">
+<li><p>Provides an option to determine whether there is a table of contents included in the document (implemented by passing <code>toc</code> through to the base format).</p></li>
+<li><p>Sets a default height and width for figures (note this is purposely not user-customizable so as to encourage a standard for all reports of this type).</p></li>
+<li><p>Disables the default bootstrap theme and provides custom CSS in its place.</p></li>
+<li><p>Adds a standard header to every document.</p></li>
+</ol>
+<p>Note that (3) and (4) are implemented using external files that are stored within the package that defines the custom format, so their locations need to be looked up using the <code>system.file</code> function.</p>
+</div>
+<div id="fully-custom-formats" class="section level2">
+<h2>Fully Custom Formats</h2>
+<p>At it’s core an R Markdown format consists of:</p>
+<ol style="list-style-type: decimal">
+<li><p>A set of knitr options that govern how Rmd is converted to markdown.</p></li>
+<li><p>A set of pandoc options that govern how markdown is converted to the final output format (e.g. HTML).</p></li>
+<li><p>Some optional flags and filters (typically used to control handling of supporting files).</p></li>
+</ol>
+<p>You can create a new format using the <code>output_format</code> function. For example, here is the simpliest possible format defintion:</p>
+<pre class="r"><code>simple_html_format &lt;- function() {
+  require(rmarkdown)
+  output_format(knitr = knitr_options(opts_chunk = list(dev = &#39;png&#39;)),
+                pandoc = pandoc_options(to = &quot;html&quot;))
+}</code></pre>
+<p>Of course, knitr and pandoc options can get considerabiy more complicated (see the <code>knitr_options</code> and <code>pandoc_options</code> functions for details). If there are supporting files required for your format (e.g. HTML/CSS/JS) then you’ll also need to use the other arguments to <code>output_format</code> to ensure they are handled correctly.</p>
+<p>The best way to learn about creating fully custom formats is to study the code of the existing built-in formats (e.g. <code>html_document</code> and <code>pdf_document</code>). In some cases a custom format will define it’s own <a href="http://johnmacfarlane.net/pandoc/demo/example9/templates.html">pandoc template</a>. You can see the default pandoc templates used by the rmarkdown package by looking in the <a href="https://github.com/rstudio/rmarkdown/tree/master/inst/rmd"><code>inst/rmd</code></a> directory of the package.</p>
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- some extra javascript for older browsers -->
+<script type="text/javascript" src="libs/polyfill.js"></script>
+
+<script>
+
+// manage active state of menu based on current page
+$(document).ready(function () {
+
+    // active menu
+    href = window.location.pathname
+    href = href.substr(href.lastIndexOf('/') + 1)
+    $('a[href="' + href + '"]').parent().addClass('active');
+
+    // manage active menu header
+    if (href.startsWith('authoring_'))
+      $('a[href="' + 'authoring' + '"]').parent().addClass('active');
+    else if (href.endsWith('_format.html'))
+      $('a[href="' + 'formats' + '"]').parent().addClass('active');
+    else if (href.startsWith('developer_'))
+      $('a[href="' + 'developer' + '"]').parent().addClass('active');
+
+});
+
+</script>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+
+</body>
+</html>

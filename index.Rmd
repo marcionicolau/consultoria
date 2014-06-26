@@ -1,5 +1,5 @@
 ---
-title: R Markdown --- Dynamic Documents for R
+title: "Trabalhe com a incerteza"
 ---
 
 ***
@@ -135,6 +135,11 @@ You can also render all formats defined in an input file with:
 render("input.Rmd", "all")
 ```
 
+
+```{r,echo=FALSE}
+rmdexamples::justgage(title = 'Example Justgage', value = 35, min = 0,
+                      max = 100, width = 200, height = 100)
+```
 
 ## Learning More
 
