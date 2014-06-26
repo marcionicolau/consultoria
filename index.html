@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta name="generator" content="pandoc" />
+
+
+
+<title>R Markdown — Dynamic Documents for R</title>
+
+<script src="libs/jquery-1.11.0/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="libs/bootstrap-2.3.2/css/united.min.css" rel="stylesheet" />
+<link href="libs/bootstrap-2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-2.3.2/js/bootstrap.min.js"></script>
+
+<style type="text/css">
+
+/* padding for bootstrap navbar */
+body {
+  padding-top: 50px;
+  padding-bottom: 40px;
+}
+@media (max-width: 979px) {
+  body {
+    padding-top: 0;
+  }
+}
+
+/* offset scroll position for anchor links (for fixed navbar)  */
+@media (min-width: 980px) {
+  .section h2 {
+    padding-top: 52px;
+    margin-top: -52px;
+  }
+  .section h3 {
+    padding-top: 52px;
+    margin-top: -52px;
+  }
+}
+
+
+/* don't use link color in navbar */
+.dropdown-menu>li>a {
+  color: black;
+}
+
+</style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="libs/highlight/textmate.css"
+      type="text/css" />
+<script src="libs/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<div class="container-fluid main-container">
+
+
+<div class="navbar navbar-default navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="brand" href="index.html">R Markdown</a>
+      <div class="nav-collapse collapse">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li class="dropdown">
+            <a href="authoring" class="dropdown-toggle" data-toggle="dropdown">Authoring <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+               <li><a href="authoring_basics.html">Markdown Basics</a></li>
+               <li><a href="authoring_pandoc_markdown.html">Pandoc Markdown</a></li>
+               <li><a href="authoring_rcodechunks.html">R Code Chunks</a></li>
+               <li class="divider"></li>
+               <li><a href="authoring_shiny.html">Interactive Shiny Docs</a></li>
+               <li class="divider"></li>
+               <li><a href="authoring_migrating_from_v1.html">Migrating from v1</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="formats" class="dropdown-toggle" data-toggle="dropdown">Formats <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+               <li class="nav-header">Documents</li>
+               <li><a href="html_document_format.html">HTML</a></li>
+               <li><a href="pdf_document_format.html">PDF</a></li>
+               <li><a href="word_document_format.html">Word</a></li>
+               <li><a href="markdown_document_format.html">Markdown</a></li>
+               <li class="divider"></li>
+               <li class="nav-header">Presentations</li>
+               <li><a href="ioslides_presentation_format.html">ioslides</a></li>
+               <li><a href="revealjs_presentation_format.html">reveal.js</a></li>
+               <li><a href="beamer_presentation_format.html">Beamer</a></li>
+               <li class="divider"></li>
+               <li><a href="r_notebook_format.html">R Notebooks</a></li>
+            </ul>
+          </li>
+           <li class="dropdown">
+            <a href="developer" class="dropdown-toggle" data-toggle="dropdown">Developer <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+               <li><a href="developer_html_widgets.html">HTML Widgets</a></li>
+               <li><a href="developer_shiny_widgets.html">Shiny Widgets</a></li>
+               <li class="divider"></li>
+               <li><a href="developer_document_templates.html">Document Templates</a></li>
+               <li><a href="developer_custom_formats.html">Creating New Formats</a></li>
+               <li class="divider"></li>
+               <li><a href="https://github.com/rstudio/rmarkdown">R Markdown on GitHub</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+</div>
+
+<div class="container">
+<div class="row">
+<div class="span10 offset1">
+
+<div id="header">
+<h1 class="title">R Markdown — Dynamic Documents for R</h1>
+</div>
+
+
+<hr />
+<p>R Markdown is an authoring format that enables easy creation of dynamic documents, presentations, and reports from R. It combines the core syntax of <a href="http://daringfireball.net/projects/markdown/basics">markdown</a> (an easy-to-write plain text format) with embedded R code chunks that are run so their output can be included in the final document. R Markdown documents are fully <em>reproducible</em> (they can be automatically regenerated whenever underlying R code or data changes).</p>
+<p>This website describes R Markdown v2, a next generation implementation of R Markdown based on <a href="http://yihui.name/knitr/">knitr</a> and <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>. This implementation brings many enhancements to R Markdown, including:</p>
+<ul>
+<li>Create HTML, PDF, and MS Word documents as well as <a href="https://bitbucket.org/rivanvx/beamer/wiki/Home">Beamer</a>, <a href="https://code.google.com/p/io-2012-slides/">ioslides</a> and <a href="http://lab.hakim.se/reveal-js/#/">reveal.js</a> presentations.</li>
+<li>New markdown syntax including expanded support for tables and bibliographies.</li>
+<li>Hooks for customizing HTML and PDF output (include CSS, headers, and footers).</li>
+<li>Include raw LaTeX within markdown for advanced customization of PDF output.</li>
+<li>Compile HTML, PDF, or MS Word notebooks from R scripts.</li>
+<li>Extensiblity: create custom templates and even entirely new output formats.</li>
+<li>Use Shiny within R Markdown documents</li>
+</ul>
+<p>Note that PDF output (including Beamer slides) requires an installation of TeX. On Windows, <a href="http://miktex.org/">MiKTeX</a> should be used rather than TeX Live.</p>
+<div id="installing-r-markdown" class="section level4">
+<h4>Installing R Markdown</h4>
+<p>You can use R Markdown either through the the integrated support for R Markdown within RStudio or via the rmarkdown package:</p>
+<ol style="list-style-type: decimal">
+<li><p>RStudio — Install the current <a href="http://www.rstudio.com/ide/download/preview">RStudio Preview Release</a>.</p></li>
+<li><p>Other environments — Install the <a href="https://github.com/rstudio/rmarkdown">rmarkdown package</a>.</p></li>
+</ol>
+</div>
+<div id="quick-tour" class="section level2">
+<h2>Quick Tour</h2>
+<div id="markdown-basics" class="section level3">
+<h3>Markdown Basics</h3>
+<p>Markdown is a simple formatting language designed to make authoring content easy for everyone. Rather than writing complex markup code (e.g. HTML or LaTeX), Markdown enables the use of a syntax much more like plain-text email. For example the file on the left shows basic Markdown and the resulting output on the right:</p>
+<p><img src="images/markdownOverview.png" alt="Markdown Overview" /></p>
+</div>
+<div id="r-code-chunks" class="section level3">
+<h3>R Code Chunks</h3>
+<p>Within an R Markdown file, R Code Chunks can be embedded using the native Markdown syntax for fenced code regions. For example, the following code chunk computes a data summary and renders a plot as a PNG image:</p>
+<p><img src="images/markdownChunk.png" alt="Markdown Chunk" /></p>
+</div>
+<div id="inline-r-code" class="section level3">
+<h3>Inline R Code</h3>
+<p>You can also evaluate R expressions inline by enclosing the expression within a single back-tick qualified with ‘r’. For example, the following code:</p>
+<p><img src="images/markdownInline.png" alt="Markdown Inline" /></p>
+<p>Results in this output: “I counted 2 red trucks on the highway.”</p>
+</div>
+<div id="embedding-equations" class="section level3">
+<h3>Embedding Equations</h3>
+<p>You can embed LaTeX or MathML equations in R Markdown files using the following syntax:</p>
+<ul>
+<li><em><code>$equation$</code></em> for inline equations (note there must not be white space adjacent to the $ delimiters)</li>
+<li><em><code>$$ equation $$</code></em> for display equations</li>
+<li><em><code>&lt;math ...&gt; &lt;/math&gt;</code></em> for MathML equations.</li>
+</ul>
+<p>For example:</p>
+<p><img src="images/equations_inline.png" alt="Equation Inline" /></p>
+</div>
+<div id="rendering-output" class="section level3">
+<h3>Rendering Output</h3>
+<p>There are two ways to render an R Markdown document into it’s final output format. If you are using RStudio, then the “Knit” command (Ctrl+Shift+K) will render the document and display a preview of it.</p>
+<p>If you are not using RStudio then you simply need to call the <code>rmarkdown::render</code> function, for example:</p>
+<pre class="r"><code>rmarkdown::render(&quot;input.Rmd&quot;)</code></pre>
+<p>Note that in the case using the “Knit” button in RStudio the basic mechanism is the same (RStudio calls the <code>rmarkdown::render</code> function under the hood).</p>
+</div>
+<div id="output-options" class="section level3">
+<h3>Output Options</h3>
+<p>R Markdown documents can contain a metadata section that includes both title, author, and date information as well as options for customizing output. For example, this metadata included at the top of an Rmd file adds a table of contents and chooses a different HTML theme:</p>
+<pre><code>---
+title: &quot;Sample Document&quot;
+output:
+  html_document:
+    toc: true
+    theme: united
+---</code></pre>
+<p>R Markdown has built in support for several output formats (HTML, PDF, and MS Word documents as well as Beamer presentations). These formats can also be specified in metadata, for example:</p>
+<pre><code>---
+title: &quot;Sample Document&quot;
+output:
+  pdf_document:
+    toc: true
+    highlight: zenburn
+---</code></pre>
+<p>If you aren’t specifying format options you can also just use a simple format name:</p>
+<pre><code>---
+title: &quot;Sample Document&quot;
+output: pdf_document
+---</code></pre>
+<p>Multiple formats can be specified in metadata:</p>
+<pre><code>---
+title: &quot;Sample Document&quot;
+output:
+  html_document:
+    toc: true
+    theme: united
+  pdf_document:
+    toc: true
+    highlight: zenburn
+---</code></pre>
+<p>If you are using <code>rmarkdown::render</code> then you can pass a format name to <code>render</code> to select from the available formats. For example:</p>
+<pre class="r"><code>render(&quot;input.Rmd&quot;, &quot;pdf_document&quot;)</code></pre>
+<p>You can also render all formats defined in an input file with:</p>
+<pre class="r"><code>render(&quot;input.Rmd&quot;, &quot;all&quot;)</code></pre>
+</div>
+</div>
+<div id="learning-more" class="section level2">
+<h2>Learning More</h2>
+<p>With the basics described above you can get started with R Markdown right away. To learn more see:</p>
+<ul>
+<li><p><a href="authoring_basics.html">Markdown Basics</a>, which describes the most commonly used markdown constructs.</p></li>
+<li><p><a href="authoring_rcodechunks.html">R Code Chunks</a>, which goes into more depth on customizing the behavior of embedded R code.</p></li>
+<li><p><a href="authoring_shiny.html">Interactive Documents with Shiny</a>, which describes how to include Shiny components within R Markdown documents.</p></li>
+<li><p><a href="authoring_compile_notebook.html">Compiling Notebooks</a>, which describes how to compile HTML, PDF, or MS Word notebooks from R scripts.</p></li>
+<li><p>Document output formats: <a href="html_document_format.html">HTML</a>, <a href="pdf_document_format.html">PDF</a>, <a href="word_document_format.html">Word</a></p></li>
+<li><p>Presentation output formats: <a href="ioslides_presentation_format.html">ioslides</a>, <a href="revealjs_presentation_format.html">reveal.js</a>, <a href="beamer_presentation_format.html">Beamer</a></p></li>
+</ul>
+<p>For even more in-depth documentation see:</p>
+<ul>
+<li><p>The website for the <a href="http://yihui.name/knitr/">knitr package</a>. Knitr is an extremely powerful tool for dynamic content generation and the website has a wealth of documentation and examples to help you utilize it to its full potential.</p></li>
+<li><p>The full specification of <a href="authoring_pandoc_markdown.html">Pandoc Markdown</a>, which describes all of the markdown features and syntax available within R Markdown documents.</p></li>
+<li><p>If you are migrating documents from R Markdown v1 or wish to continue using RMarkdown v1 see the article on <a href="authoring_migrating_from_v1.html">Migrating from R Markdown v1</a>.</p></li>
+</ul>
+<p>See also the R Markdown developer documentation including:</p>
+<ul>
+<li><p>Creating re-usable <a href="developer_document_templates.html">Document Templates</a></p></li>
+<li><p>Guide to <a href="developer_custom_formats.html">Creating New Formats</a> for R Markdown</p></li>
+<li><p>Adding new types of HTML output to R Markdown documents using <a href="developer_html_widgets.html">HTML Widgets</a> and <a href="developer_shiny_widgets.html">Shiny Widgets</a>.</p></li>
+</ul>
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- some extra javascript for older browsers -->
+<script type="text/javascript" src="libs/polyfill.js"></script>
+
+<script>
+
+// manage active state of menu based on current page
+$(document).ready(function () {
+
+    // active menu
+    href = window.location.pathname
+    href = href.substr(href.lastIndexOf('/') + 1)
+    $('a[href="' + href + '"]').parent().addClass('active');
+
+    // manage active menu header
+    if (href.startsWith('authoring_'))
+      $('a[href="' + 'authoring' + '"]').parent().addClass('active');
+    else if (href.endsWith('_format.html'))
+      $('a[href="' + 'formats' + '"]').parent().addClass('active');
+    else if (href.startsWith('developer_'))
+      $('a[href="' + 'developer' + '"]').parent().addClass('active');
+
+});
+
+</script>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+
+</body>
+</html>
